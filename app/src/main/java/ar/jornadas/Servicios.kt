@@ -10,7 +10,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class Servicios(context: Context) {
     val mesa = ServicioLocal(context)
-    private val archivo = Room.databaseBuilder(context, Archivo::class.java, "cartelera.db").build()
+    private val archivo = Room.databaseBuilder(context, Archivo::class.java, "cartelera.db")
+        .addMigrations(MIGRACION_1_2, MIGRACION_2_3)
+        .build()
     private val api = Retrofit.Builder().baseUrl("https://programa.invalid/")
         .client(OkHttpClient.Builder().addInterceptor(mesa).build())
         .addConverterFactory(GsonConverterFactory.create()).build().create(ProgramaApi::class.java)

@@ -17,6 +17,7 @@ fun Portada(model: ProgramaModel) {
     var seccion by rememberSaveable { mutableStateOf("Programa") }
     var detalle by rememberSaveable { mutableStateOf<String?>(null) }
     val charlas by model.charlas.collectAsStateWithLifecycle()
+    val hayEdicion by model.hayEdicion.collectAsStateWithLifecycle()
     BackHandler(detalle != null || seccion != "Programa") {
         if (detalle != null) detalle = null else seccion = "Programa"
     }
@@ -42,9 +43,11 @@ fun Portada(model: ProgramaModel) {
                         Text("Día ${ficha.dia} · ${ficha.hora} · ${ficha.sala}")
                         Text(ficha.ponente, style = MaterialTheme.typography.titleMedium)
                         Text(ficha.resumen)
-                        Button(onClick = { model.marcar(ficha.id) }) {
+                        Button(onClick = { model.marcar(ficha.id, !ficha.favorita) }) {
                             Text(if (ficha.favorita) "Quitar de mi agenda" else "Agregar a mi agenda")
                         }
+                    } else if (hayEdicion) {
+                        Text("Esta charla ya no forma parte del programa")
                     }
                 } else {
                     Text(seccion, style = MaterialTheme.typography.headlineLarge)
